@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Web Microservice</title>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <script>
+        const API_SERVICE_URL = "<%= API_SERVICE_URL %>";
+
+        const addNew = async (file) => {
+            const input = document.getElementById('value');
+            const status = document.getElementById('status');
+            status.innerHTML = '';
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', API_SERVICE_URL + '/add', true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (xhr.status != 200 && xhr.status != 204) {
+                    const message = xhr.status + ': ' + xhr.statusText;
+                    status.innerHTML = message;
+                    alert(message);
+                } else {
+                    status.innerHTML = 'OK'
+                }
+            }
+
+            const json = JSON.stringify({
+                value: input.value,
+            });
+
+            xhr.send(json);
+        };
+
+        document.addEventListener("DOMContentLoaded", function (event) {});
+    </script>
+
+    <h1>Add new</h1>
+    <input id="value" type="text">
+    <button onclick="addNew()">Add</button>
+    <span id="status"></span>
+</body>
+<html>

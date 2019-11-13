@@ -35,8 +35,14 @@ app.set("view engine", "ejs");
 
 /* Service endpoints */
 
-app.use("/", (req, res, next) => {
+app.get("/", (req, res, next) => {
     res.render("index", {
+        API_SERVICE_URL: apiServiceUrl
+    });
+});
+
+app.get("/add", (req, res, next) => {
+    res.render("add", {
         API_SERVICE_URL: apiServiceUrl
     });
 });
