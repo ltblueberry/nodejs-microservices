@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 /* Append to service log file */
-const logFile = path.join(__dirname, 'db.log');
+const logFile = path.join(__dirname, 'api.log');
 const appendLogFile = (string) => {
     let date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
     const logMessage = `[${date}] ${string}\n`;
