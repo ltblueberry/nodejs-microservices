@@ -12,6 +12,7 @@ It is an example with three simple NodeJS applications that uses one another.
 
 # Env variables
 Microservices use next env variables.
+
 **db**:
 * DATABASE_HOST - MongoDB host address (default 127.0.0.1)
 * DATABASE_PORT - MongoDB port (default 27017)
