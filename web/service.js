@@ -2,9 +2,17 @@
 
 const express = require('express');
 const app = express();
+const request = require('request');
+const bodyParser = require('body-parser');
 const morgan = require('morgan')
 const fs = require('fs')
 const path = require('path')
+
+/* Setup requests body parser*/
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 /* Append to service log file */
 const logFile = path.join(__dirname, 'web.log');
@@ -33,18 +41,57 @@ const apiServiceUrl = "http://" + apiServiceHost + ":" + apiServicePort;
 app.set('views', __dirname + '/views');
 app.set("view engine", "ejs");
 
-/* Service endpoints */
+/* Service page */
 
 app.get("/", (req, res, next) => {
-    res.render("index", {
-        API_SERVICE_URL: apiServiceUrl
-    });
+    res.render("index", {});
 });
 
 app.get("/add", (req, res, next) => {
-    res.render("add", {
-        API_SERVICE_URL: apiServiceUrl
+    res.render("add", {});
+});
+
+/* Async-Await request */
+const makeRequest = async (value) =>
+    new Promise((resolve, reject) => {
+        request(value, (error, response, data) => {
+            if (error) reject(error)
+            if (response.statusCode != 200 && response.statusCode != 204) reject(Error('Not native error'))
+            else resolve(data)
+        })
     });
+
+/* Service endpoints */
+
+app.get('/list', async function (req, res, next) {
+    try {
+        const result = await makeRequest(apiServiceUrl + '/list');
+        if (!result) {
+            return res.sendStatus(204);
+        }
+        const json = JSON.parse(result);
+        res.status(200).json(json);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/* Add new item to Elements collection */
+app.post('/add', async function (req, res, next) {
+    try {
+        const result = await makeRequest({
+            url: apiServiceUrl + '/add',
+            method: 'POST',
+            form: req.body
+        });
+        if (!result) {
+            return res.sendStatus(204);
+        }
+        const json = JSON.parse(result);
+        res.status(200).json(json);
+    } catch (err) {
+        next(err);
+    }
 });
 
 /* Start service */
@@ -52,4 +99,6 @@ const port = process.env.PORT || 3000
 app.listen(port, function () {
     const startMessage = 'WEB service started. Listening on port ' + port;
     appendLogFile(startMessage);
+    const dbServiceMessage = '[API] ' + apiServiceUrl;
+    appendLogFile(dbServiceMessage);
 });

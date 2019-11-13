@@ -63,6 +63,8 @@ mongoose.connect(connectionString, {
     }
     const port = process.env.PORT || 3002
     app.listen(port, function () {
+        const connectionMessage = 'Connected to ' + connectionString + ' successfully';
+        appendLogFile(connectionMessage);
         const startMessage = 'Database service started. Listening on port ' + port;
         appendLogFile(startMessage);
     });
@@ -76,6 +78,7 @@ app.get('/elements', async function (req, res, next) {
         const result = await Element.find().exec();
         res.status(200).json(result);
     } catch (err) {
+        appendLogFile(err);
         next(err);
     }
 });
@@ -84,6 +87,7 @@ app.get('/elements', async function (req, res, next) {
 app.post('/elements', async function (req, res, next) {
     if (!req.body || !req.body.value) {
         const message = 'Missing "value" body parameter';
+        appendLogFile(message);
         res.status(400).json({
             code: 400,
             message: message
@@ -97,6 +101,7 @@ app.post('/elements', async function (req, res, next) {
         const item = await (new Element(data)).save();
         res.status(200).json(item);
     } catch (err) {
+        appendLogFile(err);
         next(err);
     }
 });
