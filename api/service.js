@@ -2,7 +2,8 @@
 
 const express = require('express');
 const app = express();
-var request = require('request');
+const cors = require('cors');
+const request = require('request');
 const bodyParser = require('body-parser');
 const morgan = require('morgan')
 const fs = require('fs')
@@ -36,6 +37,9 @@ const dbServiceHost = process.env.DB_SERVICE_HOST || '127.0.0.1';
 const dbServicePort = process.env.DB_SERVICE_PORT || '3002';
 
 const dbServiceUrl = "http://" + dbServiceHost + ":" + dbServicePort;
+
+/* Enable CORS */
+app.use(cors());
 
 /* Service endpoints */
 
