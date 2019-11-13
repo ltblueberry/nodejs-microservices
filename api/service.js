@@ -69,7 +69,10 @@ app.post('/add', async function (req, res, next) {
             if (err) {
                 return next(err);
             } else {
-                if (body) {
+                if (response.statusCode != 200) {
+                    const error = JSON.parse(body);
+                    res.status(error.code).json(error);
+                } else if (body) {
                     const json = JSON.parse(body);
                     res.status(200).json(json);
                 } else {
