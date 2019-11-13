@@ -63,7 +63,7 @@ mongoose.connect(connectionString, {
     }
     const port = process.env.PORT || 3002
     app.listen(port, function () {
-        const startMessage = 'Server started. Listening on port ' + port;
+        const startMessage = 'Database service started. Listening on port ' + port;
         appendLogFile(startMessage);
     });
 });
