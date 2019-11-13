@@ -36,7 +36,9 @@ app.set("view engine", "ejs");
 /* Service endpoints */
 
 app.use("/", (req, res, next) => {
-    res.render("index", {});
+    res.render("index", {
+        API_SERVICE_URL: apiServiceUrl
+    });
 });
 
 /* Start service */
