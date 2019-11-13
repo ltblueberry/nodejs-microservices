@@ -2,7 +2,8 @@
 
 const express = require('express');
 const app = express();
-var request = require('request');
+const cors = require('cors');
+const request = require('request');
 const bodyParser = require('body-parser');
 const morgan = require('morgan')
 const fs = require('fs')
@@ -15,7 +16,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 /* Append to service log file */
-const logFile = path.join(__dirname, 'db.log');
+const logFile = path.join(__dirname, 'api.log');
 const appendLogFile = (string) => {
     let date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
     const logMessage = `[${date}] ${string}\n`;
@@ -36,6 +37,9 @@ const dbServiceHost = process.env.DB_SERVICE_HOST || '127.0.0.1';
 const dbServicePort = process.env.DB_SERVICE_PORT || '3002';
 
 const dbServiceUrl = "http://" + dbServiceHost + ":" + dbServicePort;
+
+/* Enable CORS */
+app.use(cors());
 
 /* Service endpoints */
 
@@ -65,7 +69,10 @@ app.post('/add', async function (req, res, next) {
             if (err) {
                 return next(err);
             } else {
-                if (body) {
+                if (response.statusCode != 200) {
+                    const error = JSON.parse(body);
+                    res.status(error.code).json(error);
+                } else if (body) {
                     const json = JSON.parse(body);
                     res.status(200).json(json);
                 } else {
