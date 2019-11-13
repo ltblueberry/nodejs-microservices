@@ -1,0 +1,16 @@
+{
+    "name": "web-service",
+    "version": "1.0.0",
+    "description": "WEB microservice",
+    "main": "service.js",
+    "scripts": {
+        "start": "node ./service.js"
+    },
+    "author": "ltblueberry",
+    "license": "ISC",
+    "dependencies": {
+        "ejs": "^2.7.1",
+        "express": "^4.16.4",
+        "morgan": "^1.9.1"
+    }
+}

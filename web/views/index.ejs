@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Web Microservice</title>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <script>
+        // const API_URL = < %= elements[i].value % > -->
+        const loadList = async (file) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://127.0.0.1:3001/list', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.status != 200 && xhr.status != 204) {
+                    alert(xhr.status + ': ' + xhr.statusText);
+                } else if (xhr.response) {
+                    const json = JSON.parse(xhr.response);
+                    displayList(json);
+                }
+            }
+            xhr.send();
+        };
+
+        const displayList = (list) => {
+            let element = document.getElementById('elements');
+            const headers = '<tr><th>_id</th><th>value</th></tr>';
+            let content = ''
+            for (var i = 0; i < list.length; i++) {
+                const item = list[i];
+                const id = '<td>' + item._id + '</td>';
+                const value = '<td> ' + item.value + '</td>';
+                const itemHTML = id + value;
+                content += '<tr>' + itemHTML + '</tr>';
+            }
+            element.innerHTML = '<table border="1" cellspacing="2" cellpadding="5">' + headers + content +
+                '</table>';
+        }
+        document.addEventListener("DOMContentLoaded", function (event) {
+            loadList()
+        });
+    </script>
+
+    <h1>Elements</h1>
+    <div id="elements"></div>
+</body>
+<html>
