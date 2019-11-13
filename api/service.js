@@ -41,50 +41,54 @@ const dbServiceUrl = "http://" + dbServiceHost + ":" + dbServicePort;
 /* Enable CORS */
 app.use(cors());
 
+/* Async-Await request */
+const makeRequest = async (value) =>
+    new Promise((resolve, reject) => {
+        request(value, (error, response, data) => {
+            if (error) reject(error)
+            if (response.statusCode != 200 && response.statusCode != 204) reject(Error('Not native error'))
+            else resolve(data)
+        })
+    });
+
 /* Service endpoints */
 
 /* Get all items in Elements collection */
 app.get('/list', async function (req, res, next) {
-    request(dbServiceUrl + '/elements', (err, response, body) => {
-        if (err) {
-            return next(err);
-        } else {
-            if (body) {
-                const json = JSON.parse(body);
-                res.status(200).json(json);
-            } else {
-                res.send(response);
-            }
+    try {
+        const result = await makeRequest(dbServiceUrl + '/elements');
+        if (!result) {
+            return res.sendStatus(204);
         }
-    })
+        const json = JSON.parse(result);
+        res.status(200).json(json);
+    } catch (err) {
+        next(err);
+    }
 });
 
 /* Add new item to Elements collection */
 app.post('/add', async function (req, res, next) {
-    request.post({
+    try {
+        const result = await makeRequest({
             url: dbServiceUrl + '/elements',
+            method: 'POST',
             form: req.body
-        },
-        function (err, response, body) {
-            if (err) {
-                return next(err);
-            } else {
-                if (response.statusCode != 200) {
-                    const error = JSON.parse(body);
-                    res.status(error.code).json(error);
-                } else if (body) {
-                    const json = JSON.parse(body);
-                    res.status(200).json(json);
-                } else {
-                    res.send(response);
-                }
-            }
+        });
+        if (!result) {
+            return res.sendStatus(204);
         }
-    )
+        const json = JSON.parse(result);
+        res.status(200).json(json);
+    } catch (err) {
+        next(err);
+    }
 });
 
 const port = process.env.PORT || 3001
 app.listen(port, function () {
     const startMessage = 'API service started. Listening on port ' + port;
     appendLogFile(startMessage);
+    const dbServiceMessage = '[DB service] ' + dbServiceUrl;
+    appendLogFile(dbServiceMessage);
 });

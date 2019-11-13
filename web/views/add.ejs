@@ -8,15 +8,13 @@
 
 <body>
     <script>
-        const API_SERVICE_URL = "<%= API_SERVICE_URL %>";
-
         const addNew = async (file) => {
             const input = document.getElementById('value');
             const status = document.getElementById('status');
             status.innerHTML = '';
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', API_SERVICE_URL + '/add', true);
+            xhr.open('POST', '/add', true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function () {
                 if (xhr.status != 200 && xhr.status != 204) {
