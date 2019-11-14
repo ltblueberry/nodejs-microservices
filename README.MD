@@ -9,6 +9,7 @@ It is an example with three simple NodeJS applications that uses one another.
 * NodeJS
 * npm in package.json 
 * MongoDB host
+* Docker & docker-compose
 
 # Env variables
 Microservices use next env variables.
@@ -75,4 +76,17 @@ Checkout **3000** port for web pages:
 * **<IP_address>:3000/add** - add new item to database page
 
 **Checkout firewall rules for incoming internet traffic to 3000 port for host**.
+
+# Docker-compose
+Instead of strting docker containers one by one with `docker run` command, we can use **docker-compose**. We have the same configuration as we did before with `docker` commands, but now it is declaratively written in **docker-compose.yml** file.
+
+To start our containers simply execute command in directory with **docker-compose.yml** file
+```
+docker-compose up
+
+# In background mode
+docker-compose up -d
+```
+To start our containers we need only docker and docker-compose tools, no nodejs, no mongo, no anything except this things. It's nice to deploy.
+
 
