@@ -78,7 +78,7 @@ Checkout **3000** port for web pages:
 **Checkout firewall rules for incoming internet traffic to 3000 port for host**.
 
 # Docker-compose
-Instead of strting docker containers one by one with `docker run` command, we can use **docker-compose**. We have the same configuration as we did before with `docker` commands, but now it is declaratively written in **docker-compose.yml** file.
+Instead of starting docker containers one by one with `docker run` command, we can use **docker-compose**. We have the same configuration as we did before with `docker` commands, but now it is declaratively written in **docker-compose.yml** file.
 
 To start our containers simply execute command in directory with **docker-compose.yml** file
 ```
