@@ -1,0 +1,47 @@
+version: '3.5'
+
+networks:
+  micro_net:
+    name: micro_net
+
+volumes:
+  mongo_content:
+
+services:
+  db:
+    image: mongo:4.0
+    restart: always
+    volumes:
+      - mongo_content:/data/db
+    networks:
+      - micro_net
+  db_service:
+    image: ltblueberry/db-service:1.0
+    restart: always
+    networks:
+      - micro_net
+    environment:
+      DATABASE_HOST: db
+    depends_on:
+      - db
+  api_service:
+    image: ltblueberry/api-service:1.0
+    restart: always
+    networks:
+      - micro_net
+    environment:
+      DB_SERVICE_HOST: db_service
+    depends_on:
+      - db_service
+  web_service:
+    image: ltblueberry/web-service:1.0
+    restart: always
+    networks:
+      - micro_net
+    environment:
+      API_SERVICE_HOST: api_service
+    ports:
+      - 3000:3000/tcp
+    depends_on:
+      - api_service
+    
