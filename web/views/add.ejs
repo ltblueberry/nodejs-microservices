@@ -14,7 +14,7 @@
             status.innerHTML = '';
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/add', true);
+            xhr.open('POST', '/web-service/add', true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function () {
                 if (xhr.status != 200 && xhr.status != 204) {

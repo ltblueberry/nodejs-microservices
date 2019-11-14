@@ -31,11 +31,9 @@ app.use(morgan('combined', {
     stream: accessLogStream
 }))
 
-/* Database connection and start service*/
-const apiServiceHost = process.env.API_SERVICE_HOST || '127.0.0.1';
-const apiServicePort = process.env.API_SERVICE_PORT || '3001';
-
-const apiServiceUrl = "http://" + apiServiceHost + ":" + apiServicePort;
+/* API service connection string */
+const balancerHost = process.env.BALANCER_HOST || '127.0.0.1:3001';
+const apiServiceUrl = 'http://' + balancerHost + '/api-service'
 
 /* Set view engine render */
 app.set('views', __dirname + '/views');
@@ -43,11 +41,11 @@ app.set("view engine", "ejs");
 
 /* Service page */
 
-app.get("/", (req, res, next) => {
+app.get("/pages", (req, res, next) => {
     res.render("index", {});
 });
 
-app.get("/add", (req, res, next) => {
+app.get("/pages/add", (req, res, next) => {
     res.render("add", {});
 });
 
@@ -63,7 +61,7 @@ const makeRequest = async (value) =>
 
 /* Service endpoints */
 
-app.get('/list', async function (req, res, next) {
+app.get('/web-service/list', async function (req, res, next) {
     try {
         const result = await makeRequest(apiServiceUrl + '/list');
         if (!result) {
@@ -77,7 +75,7 @@ app.get('/list', async function (req, res, next) {
 });
 
 /* Add new item to Elements collection */
-app.post('/add', async function (req, res, next) {
+app.post('/web-service/add', async function (req, res, next) {
     try {
         const result = await makeRequest({
             url: apiServiceUrl + '/add',

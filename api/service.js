@@ -33,10 +33,8 @@ app.use(morgan('combined', {
 }))
 
 /* Database connection and start service*/
-const dbServiceHost = process.env.DB_SERVICE_HOST || '127.0.0.1';
-const dbServicePort = process.env.DB_SERVICE_PORT || '3002';
-
-const dbServiceUrl = "http://" + dbServiceHost + ":" + dbServicePort;
+const balancerHost = process.env.BALANCER_HOST || '127.0.0.1:3002';
+dbServiceUrl = "http://" + balancerHost + '/db-service';
 
 /* Enable CORS */
 app.use(cors());
@@ -54,7 +52,7 @@ const makeRequest = async (value) =>
 /* Service endpoints */
 
 /* Get all items in Elements collection */
-app.get('/list', async function (req, res, next) {
+app.get('/api-service/list', async function (req, res, next) {
     try {
         const result = await makeRequest(dbServiceUrl + '/elements');
         if (!result) {
@@ -68,7 +66,7 @@ app.get('/list', async function (req, res, next) {
 });
 
 /* Add new item to Elements collection */
-app.post('/add', async function (req, res, next) {
+app.post('/api-service/add', async function (req, res, next) {
     try {
         const result = await makeRequest({
             url: dbServiceUrl + '/elements',

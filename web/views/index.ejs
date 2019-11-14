@@ -10,7 +10,7 @@
     <script>
         const loadList = async (file) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', '/list', true);
+            xhr.open('GET', '/web-service/list', true);
             xhr.onreadystatechange = function () {
                 if (xhr.status != 200 && xhr.status != 204) {
                     alert(xhr.status + ': ' + xhr.statusText);

@@ -73,7 +73,7 @@ mongoose.connect(connectionString, {
 /* Service endpoints */
 
 /* Get all items in Elements collection */
-app.get('/elements', async function (req, res, next) {
+app.get('/db-service/elements', async function (req, res, next) {
     try {
         const result = await Element.find().exec();
         res.status(200).json(result);
@@ -84,7 +84,7 @@ app.get('/elements', async function (req, res, next) {
 });
 
 /* Add new item to Elements collection */
-app.post('/elements', async function (req, res, next) {
+app.post('/db-service/elements', async function (req, res, next) {
     if (!req.body || !req.body.value) {
         const message = 'Missing "value" body parameter';
         appendLogFile(message);
