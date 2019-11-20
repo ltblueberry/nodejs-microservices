@@ -89,4 +89,8 @@ docker-compose up -d
 ```
 To start our containers we need only docker and docker-compose tools, no nodejs, no mongo, no anything except this things. It's nice to deploy.
 
+## License
 
+**[MIT License](LICENSE)**
+
+Copyright (c) 2019 [ltblueberry](https://github.com/ltblueberry)
